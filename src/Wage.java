@@ -2,9 +2,9 @@
 public class Wage {
 	String source;
 	double amount;
-	String Month;
+	double Month;
 	
-	public Wage(String source, double amount, String Month) {
+	public Wage(String source, double amount, double Month) {
 		super();
 		this.source = source;
 		this.amount = amount;

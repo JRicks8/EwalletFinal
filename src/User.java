@@ -65,7 +65,7 @@ public class User {
 	
 	public double getRecentIncome() {
 		Wage recentWage;
-		recentWage =  Income.get(Income.size() - 1);
+		recentWage = Income.get(Income.size() - 1);
 		
 		return recentWage.amount;
 	}

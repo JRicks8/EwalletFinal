@@ -415,7 +415,7 @@ public class EWalletApp extends JFrame{
 				// Handle add income action here
 				String source = sourceIncomeField.getText();
 				double amount = Double.parseDouble(amountIncomeField.getText());
-				String month = monthField.getText();
+				double month = Double.parseDouble(monthField.getText());
 
 				// Adding Income and calling Calc.addMonthlyIncome
 				Wage newWage = new Wage(source, amount, month);
