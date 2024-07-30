@@ -407,6 +407,10 @@ public class EWalletApp extends JFrame{
 				// Adding Expense and calling Calc.addexpense
 				Expense newExpense = new Expense(source, amount, freq);
 				calc.addExpense(newExpense);	
+				
+				// Get user ID
+				int userID = 1;
+				EWalletDB.addExpense(userID, source, amount, freq);
 			}
 		});
 
@@ -420,6 +424,10 @@ public class EWalletApp extends JFrame{
 				// Adding Income and calling Calc.addMonthlyIncome
 				Wage newWage = new Wage(source, amount, month);
 				calc.addMonthlyIncome(newWage);
+				
+				// Get user ID
+				int userID = 1;
+				EWalletDB.addIncome(userID, source, amount, month);
 			}
 		});
 		
