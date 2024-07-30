@@ -289,13 +289,13 @@ public class Calculations implements Expenser{
 			FileWriter writer = new FileWriter(file);
 			
 			if(kindOfReport.equals("Income")) {
-				writer.write("source,amount,month\n");
+				writer.write(kindOfReport + "\n");
 				for(Wage income : userAtHand.getIncome()) {
 					writer.write(income.source + "," + income.amount + "," + income.Month + "\n");
 				}
 			}
 			else if(kindOfReport.equals("IncomeByType")) {
-				writer.write("source,amount,month\n");
+				writer.write(kindOfReport + "\n");
 				for(Wage income : userAtHand.getIncome()) {
 					if(income.source.equals(reportType)) {
 						writer.write(income.source + "," + income.amount + "," + income.Month + "\n");
@@ -303,13 +303,13 @@ public class Calculations implements Expenser{
 				}
 			}
 			else if(kindOfReport.equals("Expense")) {
-				writer.write("source,amount,yearly_frequency\n");
+				writer.write(kindOfReport + "\n");
 				for(Expense spending : userAtHand.getSpending()) {
 					writer.write(spending.source + "," + spending.amount + "," + spending.yearlyfrequency + "\n");
 				}
 			}
 			else if(kindOfReport.equals("ExpenseByType")) {
-				writer.write("source,amount,yearly_frequency\n");
+				writer.write(kindOfReport + "\n");
 				for(Expense spending : userAtHand.getSpending()) {
 					if(spending.source.equals(reportType)) {
 						writer.write(spending.source + "," + spending.amount + "," + spending.yearlyfrequency + "\n");

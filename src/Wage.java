@@ -9,5 +9,5 @@ public class Wage {
 		this.source = source;
 		this.amount = amount;
 		this.Month = Month;
-	}	
+	}
 }
