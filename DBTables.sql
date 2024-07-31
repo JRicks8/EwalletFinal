@@ -1,22 +1,19 @@
 
-
-
-CREATE TABLE EXPENSES (
-
-	ExpenseID varchar(255),
-	ExpenseAmount int,
-	Yearly int, 
-	CurrencyID varchar(255)
-	);
-	
-	CREATE TABLE Income (
-    IncomeID varchar(255),
-    IncomeAmount int,
-    Month int,
+CREATE TABLE Expenses (
+    user_id INT,
+    source VARCHAR(255),
+    amount DOUBLE,
+    yearlyfrequency INT
 );
 
-CREATE TABLE UserLogin (
-	UserID varchar(255),
-	UserEmail varchar(255),
-	UserPW varchar(255)
+CREATE TABLE Income (
+    user_id INT,
+    source VARCHAR(255),
+    amount DOUBLE,
+    month VARCHAR(255) 
+);
+
+CREATE TABLE Users (
+    username VARCHAR(255),
+    password VARCHAR(255) 
 );

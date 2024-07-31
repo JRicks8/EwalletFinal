@@ -64,6 +64,12 @@ public class EWalletApp extends JFrame{
 	JRadioButton incomeTypeRadio = new JRadioButton("Income By Type");
 	ButtonGroup exportButtonGroup = new ButtonGroup();
 	
+	
+	// static block to initialize the database connection
+	static {
+		EWalletDB.createConnection();
+	}
+	
 	//show a popup message with the given text
 	public void PopupMessage(String _message) {
 		JOptionPane.showMessageDialog(this, _message);
@@ -409,8 +415,8 @@ public class EWalletApp extends JFrame{
 				calc.addExpense(newExpense);	
 				
 				// Get user ID
-				int userID = 1;
-				EWalletDB.addExpense(userID, source, amount, freq);
+				int userId = 1;
+				EWalletDB.addExpense(userId, source, amount, freq);
 			}
 		});
 
@@ -426,8 +432,8 @@ public class EWalletApp extends JFrame{
 				calc.addMonthlyIncome(newWage);
 				
 				// Get user ID
-				int userID = 1;
-				EWalletDB.addIncome(userID, source, amount, month);
+				int userId = 1;
+				EWalletDB.addIncome(userId, source, amount, month);
 			}
 		});
 		
