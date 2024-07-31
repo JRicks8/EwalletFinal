@@ -1,0 +1,8 @@
+-- Check data in the Income table
+SELECT * FROM Income;
+
+-- Check data in the Expenses table
+SELECT * FROM Expenses;
+
+-- Check data in the Users table
+SELECT * FROM Users;

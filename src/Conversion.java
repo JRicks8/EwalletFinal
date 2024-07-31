@@ -63,26 +63,32 @@ public class Conversion extends JFrame{
 		convertButton.setBounds(10, 320, 160, 50);
 		convertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Currency cur = calc.userAtHand.getCurrencyByName(currencyList.getSelectedValue());
-				if(cur == null) {
-					resultLabel.setText("No currency selected.");
-				}
-				else {
-					double result;
-					try {
-						result = Double.parseDouble(inputField.getText());
-						
-						result *= cur.rate;
-						
-						resultLabel.setText("Converted amount: " + result);
-					}
-					catch(Exception E) {
-						resultLabel.setText("Invalid input: must be a number. ");
-					}
-				}
-			}
-		});
-		getContentPane().add(convertButton);
-		
-	}
+				
+				Currency selectedCurrency = findCurrencyByName(currencyList.getSelectedValue());
+		        if (selectedCurrency == null) {
+		            resultLabel.setText("No currency selected.");
+		            return;
+		        }
+
+                try {
+                    double amount = Double.parseDouble(inputField.getText());
+                    double result = calc.convertForeignCurrency(selectedCurrency, amount);
+                    resultLabel.setText("Converted amount: " + result);
+                } catch (NumberFormatException ex) {
+                    resultLabel.setText("Invalid input: must be a number.");
+                }
+            }
+        });
+        getContentPane().add(convertButton);
+    }
+
+    // Method to find a currency by its name
+    private Currency findCurrencyByName(String name) {
+        for (Currency cur : calc.userAtHand.getCurrencyRates()) {
+            if (cur.name.equals(name)) {
+                return cur;
+            }
+        }
+        return null;
+    }
 }
