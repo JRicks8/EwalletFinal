@@ -44,8 +44,6 @@ public class Calculations implements Expenser{
 		ArrayList <Double>expenseTypeTotals = new ArrayList<Double>();
 		ArrayList <String>incomeTypes = new ArrayList<String>();
 		ArrayList <Double>incomeTypeTotals = new ArrayList<Double>();
-		ArrayList <String>incomeMonth = new ArrayList<String>();
-		ArrayList <Double>incomeMonthTotals = new ArrayList<Double>();
 		
 		System.out.println("Creating full report...");
 		System.out.println();
@@ -85,13 +83,14 @@ public class Calculations implements Expenser{
 		String inc = ("Income:");
 		reportListModel.addElement(inc);
 		for (i=0; i<userAtHand.getIncome().size(); i++) {
-			System.out.println("Source: " + userAtHand.getIncome().get(i).source + " Amount: " + userAtHand.getIncome().get(i).amount + " Month: " + userAtHand.getIncome().get(i).Month);
+			System.out.println("Source: " + userAtHand.getIncome().get(i).source + " Amount: " + userAtHand.getIncome().get(i).amount + " Times Per Month: " + userAtHand.getIncome().get(i).Month);
 			
-			String rep2 = ("Source: " + userAtHand.getIncome().get(i).source + " Amount: " + userAtHand.getIncome().get(i).amount + " Month: " + userAtHand.getIncome().get(i).Month);
+			String rep2 = ("Source: " + userAtHand.getIncome().get(i).source + " Amount: " + userAtHand.getIncome().get(i).amount + " Times Per Month: " + userAtHand.getIncome().get(i).Month);
 			reportListModel.addElement(rep2);
 			
 			//collect total income
-			totalIncome = totalIncome + userAtHand.getIncome().get(i).amount;
+			double thisMonthIncome = userAtHand.getIncome().get(i).amount * userAtHand.getIncome().get(i).Month;
+			totalIncome += thisMonthIncome;
 			
 			//check if the source is already a recorded type
 			if (incomeTypes.contains(userAtHand.getIncome().get(i).source.toUpperCase())) {
@@ -99,30 +98,14 @@ public class Calculations implements Expenser{
 				int index = incomeTypes.indexOf(userAtHand.getIncome().get(i).source.toUpperCase());
 				
 				//add the amount to the totals by types list in the same index spot
-				double newIncomeTotal = incomeTypeTotals.get(index) + userAtHand.getIncome().get(i).amount;
+				double newIncomeTotal = incomeTypeTotals.get(index) + thisMonthIncome;
 				incomeTypeTotals.set(index, newIncomeTotal);
 				
 			}
 			//if the type isn't in the list add the source to the type list and the amount to the total by type list
 			else {
 				incomeTypes.add(userAtHand.getIncome().get(i).source.toUpperCase());
-				incomeTypeTotals.add(userAtHand.getIncome().get(i).amount);
-			}
-			
-			//check if the month is already a recorded month
-			if (incomeMonth.contains(userAtHand.getIncome().get(i).Month.toUpperCase())) {
-				//get the index of the type in the type list
-				int index = incomeMonth.indexOf(userAtHand.getIncome().get(i).Month.toUpperCase());
-				
-				//add the amount to the totals by months list in the same index spot
-				double newMonthIncomeTotal = incomeMonthTotals.get(index) + userAtHand.getIncome().get(i).amount;
-				incomeMonthTotals.set(index, newMonthIncomeTotal);
-				
-			}
-			//if the month isn't in the list add the month to the month list and the amount to the total by month list
-			else {
-				incomeMonth.add(userAtHand.getIncome().get(i).Month.toUpperCase());
-				incomeMonthTotals.add(userAtHand.getIncome().get(i).amount);
+				incomeTypeTotals.add(thisMonthIncome);
 			}
 		}
 		System.out.println();
@@ -136,14 +119,8 @@ public class Calculations implements Expenser{
 		reportListModel.addElement(lineBreak);
 		
 		for (i=0; i<incomeTypes.size(); i++) {
-			String rep5 = ("Income Type: " + incomeTypes.get(i) + " Total Income: " + incomeTypeTotals.get(i));
+			String rep5 = ("Income Source: " + incomeTypes.get(i) + " Total Income: " + incomeTypeTotals.get(i));
 			reportListModel.addElement(rep5);
-		}
-		reportListModel.addElement(lineBreak);
-		
-		for (i=0; i<incomeMonth.size(); i++) {
-			String rep6 = ("Income Month: " + incomeMonth.get(i) + " Total Income: " + incomeMonthTotals.get(i));
-			reportListModel.addElement(rep6);
 		}
 		reportListModel.addElement(lineBreak);
 		
@@ -291,13 +268,13 @@ public class Calculations implements Expenser{
 			FileWriter writer = new FileWriter(file);
 			
 			if(kindOfReport.equals("Income")) {
-				writer.write("source,amount,month\n");
+				writer.write(kindOfReport + "\n");
 				for(Wage income : userAtHand.getIncome()) {
 					writer.write(income.source + "," + income.amount + "," + income.Month + "\n");
 				}
 			}
 			else if(kindOfReport.equals("IncomeByType")) {
-				writer.write("source,amount,month\n");
+				writer.write(kindOfReport + "\n");
 				for(Wage income : userAtHand.getIncome()) {
 					if(income.source.equals(reportType)) {
 						writer.write(income.source + "," + income.amount + "," + income.Month + "\n");
@@ -305,13 +282,13 @@ public class Calculations implements Expenser{
 				}
 			}
 			else if(kindOfReport.equals("Expense")) {
-				writer.write("source,amount,yearly_frequency\n");
+				writer.write(kindOfReport + "\n");
 				for(Expense spending : userAtHand.getSpending()) {
 					writer.write(spending.source + "," + spending.amount + "," + spending.yearlyfrequency + "\n");
 				}
 			}
 			else if(kindOfReport.equals("ExpenseByType")) {
-				writer.write("source,amount,yearly_frequency\n");
+				writer.write(kindOfReport + "\n");
 				for(Expense spending : userAtHand.getSpending()) {
 					if(spending.source.equals(reportType)) {
 						writer.write(spending.source + "," + spending.amount + "," + spending.yearlyfrequency + "\n");
@@ -387,7 +364,7 @@ public class Calculations implements Expenser{
 			String line = "";
 			String source;
 			double amount;
-			String month;
+			double month;
 			int lineNumber = 1; //used to keep track of which line is being read. 
 			
 			br.readLine(); //first line contains data field names and should be skipped. 
@@ -422,7 +399,14 @@ public class Calculations implements Expenser{
 				}
 				
 				//third data point is month. 
-				month = splitLine[2];
+				try {
+					month = Double.parseDouble(splitLine[2]);
+				}
+				catch(Exception E) {
+					IOError("invalid data on line " + lineNumber + ", third data point must be a number. ");
+					br.close();
+					return false;
+				}
 				
 				//if all three data points work, add a new expense.
 				incomes.add(new Wage(source, amount, month));

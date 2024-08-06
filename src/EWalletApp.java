@@ -67,7 +67,9 @@ public class EWalletApp extends JFrame{
 	
 	
 	// static block to initialize the database connection
-	
+	static {
+		EWalletDB.createConnection();
+	}
 	
 	//show a popup message with the given text
 	public void PopupMessage(String _message) {
@@ -385,10 +387,9 @@ public class EWalletApp extends JFrame{
 				String inputPassword = passwordField.getText();
 				boolean isValidLogin;
 
-				isValidLogin = false;
-				if (inputUsername.equals(calc.userAtHand.username) & inputPassword.equals(calc.userAtHand.pwd)) {
-					isValidLogin = true; 
-				}
+				//TODO: Login functionality
+				//isValidLogin = tryLoginAsUser(inputUsername, inputPassword);
+				isValidLogin = true;
 
 				if (isValidLogin) {
 					statusLabel.setText("Login Successful: "+ inputUsername);
@@ -416,6 +417,11 @@ public class EWalletApp extends JFrame{
 				Expense newExpense = new Expense(source, amount, freq);
 				calc.addExpense(newExpense);	
 				
+
+				// Get user ID
+				int userId = 1;
+				EWalletDB.addExpense(userId, source, amount, freq);
+
 			}
 		});
 
@@ -424,12 +430,16 @@ public class EWalletApp extends JFrame{
 				// Handle add income action here
 				String source = sourceIncomeField.getText();
 				double amount = Double.parseDouble(amountIncomeField.getText());
-				String month = monthField.getText();
+				double month = Double.parseDouble(monthField.getText());
 
 				// Adding Income and calling Calc.addMonthlyIncome
 				Wage newWage = new Wage(source, amount, month);
 				calc.addMonthlyIncome(newWage);
 				
+
+				// Get user ID
+				int userId = 1;
+				EWalletDB.addIncome(userId, source, amount, month);
 			}
 		});
 		
