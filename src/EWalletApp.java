@@ -377,10 +377,9 @@ public class EWalletApp extends JFrame{
 				String inputPassword = passwordField.getText();
 				boolean isValidLogin;
 
-				isValidLogin = false;
-				if (inputUsername.equals(calc.userAtHand.username) & inputPassword.equals(calc.userAtHand.pwd)) {
-					isValidLogin = true; 
-				}
+				//TODO: Login functionality
+				//isValidLogin = tryLoginAsUser(inputUsername, inputPassword);
+				isValidLogin = true;
 
 				if (isValidLogin) {
 					statusLabel.setText("Login Successful: "+ inputUsername);
