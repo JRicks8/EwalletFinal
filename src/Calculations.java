@@ -1,5 +1,7 @@
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 public class Calculations implements Expenser{
@@ -303,26 +305,40 @@ public class Calculations implements Expenser{
 	}
 	//	As a user I would like to view my current balance in a different currency 
 	//Bonus : try to use the same convert function to convert from foreign currency to USD 
+	 // A map to store currency conversion rates
+    private static Map<String, Double> conversionRates = new HashMap<>();
+
+    // Static block to initialize conversion rates
+    static {
+        conversionRates.put("USDEUR", 0.915);
+        conversionRates.put("EURUSD", 1.0915);
+        conversionRates.put("USDCAD", 0.7567);
+        conversionRates.put("CADUSD", 1.26);
+        conversionRates.put("EURCAD", 0.6934);
+        conversionRates.put("CADEUR", 1.441);
+        conversionRates.put("USDJPY", 143.319);
+        conversionRates.put("JPYUSD", 0.00698);
+        conversionRates.put("EURJPY", 157.009);
+        conversionRates.put("JPYEUR", 0.00637);
+        conversionRates.put("CADJPY", 106.776);
+        conversionRates.put("JPYCAD", 0.00937);
+    }
 	public double convertForeignCurrency(Currency C, double amount) {
-		double returnAmount = 0;
-		
-		returnAmount = C.rate * amount;
+		double returnAmount = C.rate * amount;
 		
 		return returnAmount; 
 	}
 	
 	//used to find a currency from the userAtHand's currency rates list.
 	public Currency findCurrencyByName(String name) {
-		Currency returnCurrency = null;
 		
 		for(Currency cur : userAtHand.getCurrencyRates()) {
 			if(cur.name.equals(name)) {
-				returnCurrency = cur;
-				break;
+				return cur;
 			}
 		}
 		
-		return returnCurrency;
+		return null;
 	}
 	
 	public void addCurrency(String name, double rate) {
