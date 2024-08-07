@@ -70,44 +70,42 @@ public class EWalletDB {
     }
     
     public static boolean tryLoginAsUser(String inputUsername, String inputPassword) {
-		String sql = "SELECT username,password FROM APP.Users WHERE username=" + inputUsername;
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.first()) {
-				
-				if (rs.getString(2).equals(inputPassword)) {
-					return true;
-				}
-				return false;
-			}
-			else {
-				String sql2 = "INSERT INTO APP.Users(inputUsername, inputPassword)";
-				try (PreparedStatement pstmt2 = conn.prepareStatement(sql2)) {
-					pstmt2.setString(1, inputUsername);
-					pstmt2.setString(2, inputPassword);
-					pstmt2.executeUpdate();
-					conn.commit();
-					System.out.println("New user added: " + inputUsername);
-					
-					
-				}
-				catch (SQLException e) {
-	                if (conn != null) {
-	                    conn.rollback(); // Undo the changes made in case of errors
-	                }
-	                e.printStackTrace();
-	                return false;
-				return true;
-				
-			}
-			
-			
-		} catch (SQLException e) {
+        
+        String sql = "SELECT username, password FROM APP.Users WHERE username=?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, inputUsername);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {  
+               
+                if (rs.getString("password").equals(inputPassword)) {
+                    return true; 
+                }
+                return false; 
+            } else {
+                
+                String insertSQL = "INSERT INTO APP.Users(username, password) VALUES(?, ?)";
+                try (PreparedStatement insertStmt = conn.prepareStatement(insertSQL)) {
+                    insertStmt.setString(1, inputUsername);
+                    insertStmt.setString(2, inputPassword);
+                    insertStmt.executeUpdate();
+                    conn.commit(); 
+                    System.out.println("New user added: " + inputUsername);
+                } catch (SQLException e) {
+                    if (conn != null) {
+                        conn.rollback(); // undo changes made in case of any errors
+                    }
+                    e.printStackTrace();
+                    return false; 
+                }
+                return true; 
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return false; 
         }
-	}
-    
+    }
     
     public static void shutdown() {
         try {
