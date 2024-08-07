@@ -391,7 +391,7 @@ public class EWalletApp extends JFrame{
 					calc.userAtHand.username = inputUsername;
 					calc.userAtHand.pwd = inputPassword;
 					
-					statusLabel.setText("Login Successful: "+ inputUsername);
+					statusLabel.setText("Login Successful: " + inputUsername);
 
 					savingsLabel.setText("Monthly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
 
