@@ -50,6 +50,8 @@ public class EWalletApp extends JFrame{
 	JButton returnWhenButton = new JButton("Return To Main Menu"); 				// Used in whenCanIBuy()
 	JButton whenCanIBuyWindowButton = new JButton("When Can I Buy");			// Used in whenCanIBuy()
 	JButton returnReportButton = new JButton("Main Menu");
+	JButton logoutButton = new JButton("Logout");
+
 	
 	// JLabels
 	JLabel statusLabel = new JLabel();									// Used in loginWindow() and to show who is logged in
@@ -220,7 +222,8 @@ public class EWalletApp extends JFrame{
 		actionPanel.add(Box.createVerticalStrut(5)); // Add space between buttons
 		actionPanel.add(whenCanIBuyWindowButton);
 		actionPanel.add(Box.createVerticalStrut(20)); // Add space between buttons
-		
+		actionPanel.add(logoutButton);
+	    actionPanel.add(Box.createVerticalStrut(5));// Add logout button
 		// Add the sub-panel to the center of the main panel
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		mainPanel.add(actionPanel, BorderLayout.EAST);
@@ -404,6 +407,12 @@ public class EWalletApp extends JFrame{
 					statusLabel.setText("Invalid Username or Password");
 				}		
 			}
+		});
+		
+		logoutButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent arg0) {
+		        handleLogout();
+		    }
 		});
 
 		addExpenseButton.addActionListener(new ActionListener() {
@@ -608,7 +617,31 @@ public class EWalletApp extends JFrame{
 			}
 		});
 		
+		 logoutButton.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent arg0) {
+	                handleLogout();
+	            }
+	        });
 	}
+
+
+	private void handleLogout() {
+    // Reset user data
+		calc.userAtHand = new User("User", "Password");
+
+    // Clear text fields
+		usernameField.setText("");
+		passwordField.setText("");
+		statusLabel.setText("");
+		savingsLabel.setText("Monthly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
+
+    // Switch to the login panel
+		CardLayout cardLayout = (CardLayout) (cards.getLayout());
+		cardLayout.show(cards, "LoginPanel");
+		setSize(300, 200);
+	}
+
+
 
 	public static void main(String[] args) {
 		EWalletApp GUI = new EWalletApp();

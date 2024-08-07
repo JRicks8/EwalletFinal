@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class EWalletDB {
-    private static String DB_URL = "jdbc:derby:C:\\Users\\oscar\\MyDB;create=true"; // Adjust the path as necessary
+    private static String DB_URL = "jdbc:derby:/Users/amberthiel/MyDBEwallet"; // Adjust the path as necessary
     private static String USER = "user"; // Default User name
     private static String PASS = "password"; // Default Password
     private static Connection conn = null;
