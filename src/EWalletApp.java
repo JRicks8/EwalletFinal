@@ -381,14 +381,16 @@ public class EWalletApp extends JFrame{
 				CardLayout cardLayout = (CardLayout)(cards.getLayout());
 				String inputUsername = usernameField.getText();
 				String inputPassword = passwordField.getText();
-				boolean isValidLogin;
-
-				isValidLogin = false;
-				if (inputUsername.equals(calc.userAtHand.username) & inputPassword.equals(calc.userAtHand.pwd)) {
+				boolean isValidLogin = EWalletDB.tryLoginAsUser(inputUsername, inputPassword);
+				
+				if (inputUsername.equals("User") && inputPassword.equals("Password")) {
 					isValidLogin = true; 
 				}
 
 				if (isValidLogin) {
+					calc.userAtHand.username = inputUsername;
+					calc.userAtHand.pwd = inputPassword;
+					
 					statusLabel.setText("Login Successful: "+ inputUsername);
 
 					savingsLabel.setText("Monthly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
@@ -433,7 +435,7 @@ public class EWalletApp extends JFrame{
 				
 				// Get user ID
 				int userId = 1;
-				EWalletDB.addIncome(userId, source, amount, month);
+				EWalletDB.addIncome(userId, source, amount, String.valueOf(month));
 			}
 		});
 		
