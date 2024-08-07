@@ -68,7 +68,32 @@ public class EWalletDB {
             e.printStackTrace();
         }
     }
-
+    
+    public static boolean tryLoginAsUser(String inputUsername, String inputPassword) {
+		String sql = "SELECT username,password FROM APP.Users WHERE username=" + inputUsername;
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.first()) {
+				
+				if (rs.getString(2).equals(inputPassword)) {
+					return true;
+				}
+				return false;
+			}
+			else {
+				
+				return true;
+				
+			}
+			
+			
+		} catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+	}
+    
+    
     public static void shutdown() {
         try {
             if (stmt != null) {

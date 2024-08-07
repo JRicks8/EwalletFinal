@@ -373,7 +373,7 @@ public class EWalletApp extends JFrame{
 		
 		return mainWhenPanel;
 	}
-
+	
 	public void actionPerformed() {
 		// Action for the LoginButton
 		loginButton.addActionListener(new ActionListener() {
@@ -381,35 +381,26 @@ public class EWalletApp extends JFrame{
 				CardLayout cardLayout = (CardLayout)(cards.getLayout());
 				String inputUsername = usernameField.getText();
 				String inputPassword = passwordField.getText();
-				boolean isValidLogin = false;
+				boolean isValidLogin;
 
-				//TODO: Login functionality
-				isValidLogin = tryLoginAsUser(inputUsername, inputPassword);
-				
-					
-					isValidLogin = EWalletDB.validateLogin(inputUsername,  inputPassword);
-				} else {
-					
-					EWalletDB.addUserLogin(inputUsername, inputPassword);
-					isValidLogin = true;
+				isValidLogin = false;
+				if (inputUsername.equals(calc.userAtHand.username) & inputPassword.equals(calc.userAtHand.pwd)) {
+					isValidLogin = true; 
 				}
+
 				if (isValidLogin) {
-					statusLabel.setText("Login Successful: " + inputUsername);
-					statusLabel.setText("Monly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
-					
-					// We'll add the user info into a CSV as backup
-					addUserToCSV(inputUsername, inputPassword);
-					
-					// Switches to Expense Panel
-					cardLayout.show(cards,"Main Panel");
-					setSize(700,300);
-					
-					
-				} else {
-					statusLabel.setText("Invalid Username or Password");
+					statusLabel.setText("Login Successful: "+ inputUsername);
+
+					savingsLabel.setText("Monthly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
+
+					//Switches to Expense Panel
+					cardLayout.show(cards, "MainPanel");
+					setSize(700, 300);
 				}
-				
-				
+				else {
+					statusLabel.setText("Invalid Username or Password");
+				}		
+			}
 		});
 
 		addExpenseButton.addActionListener(new ActionListener() {
