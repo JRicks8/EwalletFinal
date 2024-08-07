@@ -26,7 +26,7 @@ public class EWalletApp extends JFrame{
 	JTextField sourceExpenseField = new JTextField();	// Used in mainPanel()
 	JTextField amountExpenseField = new JTextField();	// Used in mainPanel()
 	JTextField yearlyFreqField = new JTextField();		// Used in mainPanel()
-	JTextField exportFileField = new JTextField("C:\\");		// Used in reportPanel()
+	JTextField exportFileField = new JTextField("C:\\");// Used in reportPanel()
 	static JTextField filterField = new JTextField();	// Used in reportPanel()
 	JTextField whenBuyItemField = new JTextField(); 	// User in whenCanIBuy()
 	JTextField whenBuyAmountField = new JTextField(); 	// User in whenCanIBuy()
@@ -381,12 +381,13 @@ public class EWalletApp extends JFrame{
 				CardLayout cardLayout = (CardLayout)(cards.getLayout());
 				String inputUsername = usernameField.getText();
 				String inputPassword = passwordField.getText();
-				boolean isValidLogin = EWalletDB.tryLoginAsUser(inputUsername, inputPassword);
-				
+				boolean isValidLogin;
 				if (inputUsername.equals("User") && inputPassword.equals("Password")) {
 					isValidLogin = true; 
+				} else {
+					isValidLogin = EWalletDB.tryLoginAsUser(inputUsername, inputPassword);
 				}
-
+				
 				if (isValidLogin) {
 					calc.userAtHand.username = inputUsername;
 					calc.userAtHand.pwd = inputPassword;
