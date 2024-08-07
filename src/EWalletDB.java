@@ -81,7 +81,22 @@ public class EWalletDB {
 				return false;
 			}
 			else {
-				
+				String sql2 = "INSERT INTO APP.Users(inputUsername, inputPassword)";
+				try (PreparedStatement pstmt2 = conn.prepareStatement(sql2)) {
+					pstmt2.setString(1, inputUsername);
+					pstmt2.setString(2, inputPassword);
+					pstmt2.executeUpdate();
+					conn.commit();
+					System.out.println("New user added: " + inputUsername);
+					
+					
+				}
+				catch (SQLException e) {
+	                if (conn != null) {
+	                    conn.rollback(); // Undo the changes made in case of errors
+	                }
+	                e.printStackTrace();
+	                return false;
 				return true;
 				
 			}
