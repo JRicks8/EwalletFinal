@@ -6,7 +6,6 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 
-
 public class EWalletApp extends JFrame{
 
 	// Initializing Calculations Object
@@ -59,10 +58,10 @@ public class EWalletApp extends JFrame{
 	JLabel whenCanIBuyCalculatedLabel = new JLabel("Estimate months needed to save.");	// Used in whenCanIBuy()
 
 	//JRadioButtons
-	//JRadioButton expenseRadio = new JRadioButton("Expense");
-	//JRadioButton incomeRadio = new JRadioButton("Income");
+	JRadioButton expenseRadio = new JRadioButton("Expense");
+	JRadioButton incomeRadio = new JRadioButton("Income");
 	JRadioButton expenseTypeRadio = new JRadioButton("Expense By Type");
-	//JRadioButton incomeTypeRadio = new JRadioButton("Income By Type");
+	JRadioButton incomeTypeRadio = new JRadioButton("Income By Type");
 	ButtonGroup exportButtonGroup = new ButtonGroup();
 	
 	
@@ -94,20 +93,16 @@ public class EWalletApp extends JFrame{
 	
 		//Initializes currency, for currency conversion testing
 		calc.addCurrency("TestCur", 2);
-		calc.addCurrency("USD", 1); 
-		calc.addCurrency("EUR", 0.9); 
-		calc.addCurrency("CAD", 1.35);
-		calc.addCurrency("JPY", 140);
 		
 		//set calc.gui to this object.
 		calc.gui = this;
 		
 
 		// Adding Components to Button Group
-		//exportButtonGroup.add(expenseRadio);
-		//exportButtonGroup.add(incomeRadio);
+		exportButtonGroup.add(expenseRadio);
+		exportButtonGroup.add(incomeRadio);
 		exportButtonGroup.add(expenseTypeRadio);
-		//exportButtonGroup.add(incomeTypeRadio);
+		exportButtonGroup.add(incomeTypeRadio);
 
 		// Create card panel with Card Layout
 		cards = new JPanel(new CardLayout());
@@ -314,16 +309,17 @@ public class EWalletApp extends JFrame{
 		eastReportPanel.add(Box.createVerticalStrut(5)); // Add space between components
 		eastReportPanel.add(printFullReportButton);
 		eastReportPanel.add(Box.createVerticalStrut(5)); // Add space between components
-		//eastReportPanel.add(expenseRadio);
-		//eastReportPanel.add(incomeRadio);
+		eastReportPanel.add(expenseRadio);
+		eastReportPanel.add(incomeRadio);
 		eastReportPanel.add(expenseTypeRadio);
-		//eastReportPanel.add(incomeTypeRadio);		
+		eastReportPanel.add(incomeTypeRadio);		
 		eastReportPanel.add(Box.createVerticalStrut(5)); // Add space between components
 		eastReportPanel.add(exportFileField);
 		eastReportPanel.add(Box.createVerticalStrut(5)); // Add space between components
 		eastReportPanel.add(exportFileButton);
 		eastReportPanel.add(Box.createVerticalStrut(5)); // Add space between components
 
+		
 		
 		// Adding components to mainReportPanel
 		mainReportPanel.add(reportTitle, BorderLayout.NORTH);
@@ -385,25 +381,35 @@ public class EWalletApp extends JFrame{
 				CardLayout cardLayout = (CardLayout)(cards.getLayout());
 				String inputUsername = usernameField.getText();
 				String inputPassword = passwordField.getText();
-				boolean isValidLogin;
+				boolean isValidLogin = false;
 
 				//TODO: Login functionality
-				//isValidLogin = tryLoginAsUser(inputUsername, inputPassword);
-				isValidLogin = true;
-
-				if (isValidLogin) {
-					statusLabel.setText("Login Successful: "+ inputUsername);
-
-					savingsLabel.setText("Monthly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
-
-					//Switches to Expense Panel
-					cardLayout.show(cards, "MainPanel");
-					setSize(700, 300);
+				isValidLogin = tryLoginAsUser(inputUsername, inputPassword);
+				
+					
+					isValidLogin = EWalletDB.validateLogin(inputUsername,  inputPassword);
+				} else {
+					
+					EWalletDB.addUserLogin(inputUsername, inputPassword);
+					isValidLogin = true;
 				}
-				else {
+				if (isValidLogin) {
+					statusLabel.setText("Login Successful: " + inputUsername);
+					statusLabel.setText("Monly Savings: " + Double.toString(calc.userAtHand.monthlysavings));
+					
+					// We'll add the user info into a CSV as backup
+					addUserToCSV(inputUsername, inputPassword);
+					
+					// Switches to Expense Panel
+					cardLayout.show(cards,"Main Panel");
+					setSize(700,300);
+					
+					
+				} else {
 					statusLabel.setText("Invalid Username or Password");
-				}		
-			}
+				}
+				
+				
 		});
 
 		addExpenseButton.addActionListener(new ActionListener() {
@@ -417,11 +423,9 @@ public class EWalletApp extends JFrame{
 				Expense newExpense = new Expense(source, amount, freq);
 				calc.addExpense(newExpense);	
 				
-
 				// Get user ID
 				int userId = 1;
 				EWalletDB.addExpense(userId, source, amount, freq);
-
 			}
 		});
 
@@ -436,7 +440,6 @@ public class EWalletApp extends JFrame{
 				Wage newWage = new Wage(source, amount, month);
 				calc.addMonthlyIncome(newWage);
 				
-
 				// Get user ID
 				int userId = 1;
 				EWalletDB.addIncome(userId, source, amount, month);
@@ -566,12 +569,24 @@ public class EWalletApp extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// Handle Export File action here
 				calc.filePath = exportFileField.getText();
-				 if(expenseTypeRadio.isSelected()) {
+				if(expenseRadio.isSelected()) {
+					calc.kindOfReport = "Expense";
+					calc.exportReport("expense");
+				}
+				else if(expenseTypeRadio.isSelected()) {
 					calc.kindOfReport = "ExpenseByType";
 					calc.reportType = filterField.getText();
 					calc.exportReport("expense_by_type");
-				
-					
+				}
+				else if(incomeRadio.isSelected()) {
+					calc.kindOfReport = "Income";
+					calc.reportType = filterField.getText();
+					calc.exportReport("income");
+				}
+				else if(incomeTypeRadio.isSelected()) {
+					calc.kindOfReport = "IncomeByType";
+					calc.reportType = filterField.getText();
+					calc.exportReport("income_by_type");
 				}
 			}
 		});
